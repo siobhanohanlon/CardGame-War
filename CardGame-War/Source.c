@@ -79,14 +79,34 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 	//Display Card Number at Top
 	for (int c = 0; c < 13; c++)
 	{
-		if (playerCard[1][c] < 10)
+		if (playerCard[1][c] > 1 && playerCard[1][c] < 10)
 		{
-			printf("| %d    | ", playerCard[1][c]);
+			printf("|%d     | ", playerCard[1][c]);
 		}
 
-		else
+		else if (playerCard[1][c] == 1)
 		{
-			printf("| %d   | ", playerCard[1][c]);
+			printf("|A     | ");
+		}
+
+		else if (playerCard[1][c] == 10)
+		{
+			printf("|%d    | ", playerCard[1][c]);
+		}
+
+		else if (playerCard[1][c] == 11)
+		{
+			printf("|J     | ");
+		}
+
+		else if (playerCard[1][c] == 12)
+		{
+			printf("|Q     | ");
+		}
+
+		else if (playerCard[1][c] == 13)
+		{
+			printf("|K     | ");
 		}
 	}
 
@@ -103,15 +123,15 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				break;
 
 			case 2:
-
+				printf("|   D  | ");
 				break;
 
 			case 3:
-
+				printf("|   S  | ");
 				break;
 
 			case 4:
-
+				printf("|   C  | ");
 				break;
 		}
 	}
@@ -119,17 +139,37 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 	//Skip to new line
 	printf("\n");
 
-	//Display Number at Bottom of Card
+	//Display Card Number at Bottom
 	for (int c = 0; c < 13; c++)
 	{
-		if (playerCard[1][c] < 10)
+		if (playerCard[1][c] > 1 && playerCard[1][c] < 10)
 		{
-			printf("|    %d | ", playerCard[1][c]);
+			printf("|     %d| ", playerCard[1][c]);
 		}
 
-		else
+		else if (playerCard[1][c] == 1)
 		{
-			printf("|   %d | ", playerCard[1][c]);
+			printf("|     A| ");
+		}
+
+		else if (playerCard[1][c] == 10)
+		{
+			printf("|    %d| ", playerCard[1][c]);
+		}
+
+		else if (playerCard[1][c] == 11)
+		{
+			printf("|     J| ");
+		}
+
+		else if (playerCard[1][c] == 12)
+		{
+			printf("|     Q| ");
+		}
+
+		else if (playerCard[1][c] == 13)
+		{
+			printf("|     K| ");
 		}
 	}
 
@@ -285,7 +325,7 @@ void ContinueGame()
 			//Assign read scores to array
 			for (int p = 0; p < numPlayers; p++)
 			{
-				fprintf(gameScores, "%d", &playerScores[p]);
+				fprintf(gameScores, "%d", playerScores[p]);
 			}
 
 			//Close File
