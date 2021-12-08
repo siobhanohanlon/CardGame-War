@@ -233,17 +233,14 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			//Set choice to players card
 #pragma region SavePlayerChoice
 			//Check if trying to play a used card
-			if(playerUsedCards[currentPlayer][(cardChoice -1)] == 1);
+			while(playerUsedCards[currentPlayer][(cardChoice - 1)] == 1)
 			{
-				do
-				{
-					//Card already chosen
-					printf("\nCard Already Played!!!!!!");
+				//Card already chosen
+				printf("\nCard Already Played!!!!!!");
 
-					//Ask Player to select card
-					printf("\nPlease Select Card you wish to Play (Or 0 to exit)\nChoice: ");
-					scanf("\t%d", &cardChoice);
-				} while (playerUsedCards[currentPlayer][(cardChoice - 1)] == 1);
+				//Ask Player to select card
+				printf("\nPlease Select Card you wish to Play (Or 0 to exit)\nChoice: ");
+				scanf("\t%d", &cardChoice);
 			}
 
 			//Save Player Select Card # and Suit
@@ -255,8 +252,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][0];
 
 				//Set card to Played
-				playerCard[currentPlayer][0] = 1;
-				playerSuit[currentPlayer][0] = 1;
+				playerCard[currentPlayer][0] = 0;
+				playerSuit[currentPlayer][0] = 0;
 				break;
 			case 2:
 				//Save Selected Card Details
@@ -264,8 +261,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][1];
 
 				//Set card to Played
-				playerCard[currentPlayer][1] = 1;
-				playerSuit[currentPlayer][1] = 1;
+				playerCard[currentPlayer][1] = 0;
+				playerSuit[currentPlayer][1] = 0;
 				break;
 			case 3:
 				//Save Selected Card Details
@@ -273,8 +270,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][2];
 
 				//Set card to Played
-				playerCard[currentPlayer][2] = 1;
-				playerSuit[currentPlayer][2] = 1;
+				playerCard[currentPlayer][2] = 0;
+				playerSuit[currentPlayer][2] = 0;
 				break;
 			case 4:
 				//Save Selected Card Details
@@ -282,8 +279,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][3];
 
 				//Set card to Played
-				playerCard[currentPlayer][3] = 1;
-				playerSuit[currentPlayer][3] = 1;
+				playerCard[currentPlayer][3] = 0;
+				playerSuit[currentPlayer][3] = 0;
 				break;
 			case 5:
 				//Save Selected Card Details
@@ -291,8 +288,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][4];
 
 				//Set card to Played
-				playerCard[currentPlayer][4] = 1;
-				playerSuit[currentPlayer][4] = 1;
+				playerCard[currentPlayer][4] = 0;
+				playerSuit[currentPlayer][4] = 0;
 				break;;
 			case 6:
 				//Save Selected Card Details
@@ -300,8 +297,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][5];
 
 				//Set card to Played
-				playerCard[currentPlayer][5] = 1;
-				playerSuit[currentPlayer][5] = 1;
+				playerCard[currentPlayer][5] = 0;
+				playerSuit[currentPlayer][5] = 0;
 				break;
 			case 7:
 				//Save Selected Card Details
@@ -309,8 +306,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][6];
 
 				//Set card to Played
-				playerCard[currentPlayer][6] = 1;
-				playerSuit[currentPlayer][6] = 1;
+				playerCard[currentPlayer][6] = 0;
+				playerSuit[currentPlayer][6] = 0;
 				break;
 			case 8:
 				//Save Selected Card Details
@@ -318,8 +315,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][7];
 
 				//Set card to Played
-				playerCard[currentPlayer][7] = 1;
-				playerSuit[currentPlayer][7] = 1;
+				playerCard[currentPlayer][7] = 0;
+				playerSuit[currentPlayer][7] = 0;
 				break;
 			case 9:
 				//Save Selected Card Details
@@ -327,8 +324,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][8];
 
 				//Set card to Played
-				playerCard[currentPlayer][8] = 1;
-				playerSuit[currentPlayer][8] = 1;
+				playerCard[currentPlayer][8] = 0;
+				playerSuit[currentPlayer][8] = 0;
 				break;
 			case 10:
 				//Save Selected Card Details
@@ -336,8 +333,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][9];
 
 				//Set card to Played
-				playerCard[currentPlayer][9] = 1;
-				playerSuit[currentPlayer][9] = 1;
+				playerCard[currentPlayer][9] = 0;
+				playerSuit[currentPlayer][9] = 0;
 				break;
 			case 11:
 				//Save Selected Card Details
@@ -345,8 +342,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][10];
 
 				//Set card to Played
-				playerCard[currentPlayer][10] = 1;
-				playerSuit[currentPlayer][10] = 1;
+				playerCard[currentPlayer][10] = 0;
+				playerSuit[currentPlayer][10] = 0;
 				break;
 			case 12:
 				//Save Selected Card Details
@@ -354,8 +351,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][11];
 
 				//Set card to Played
-				playerCard[currentPlayer][11] = 1;
-				playerSuit[currentPlayer][11] = 1;
+				playerCard[currentPlayer][11] = 0;
+				playerSuit[currentPlayer][11] = 0;
 				break;
 			case 13:
 				//Save Selected Card Details
@@ -363,12 +360,10 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][12];
 
 				//Set card to Played
-				playerCard[currentPlayer][12] = 1;
-				playerSuit[currentPlayer][12] = 1;
+				playerCard[currentPlayer][12] = 0;
+				playerSuit[currentPlayer][12] = 0;
 				break;
 			}
-				
-			
 #pragma endregion
 
 			//Add chosen card to points for round
@@ -521,7 +516,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			}
 
 			//If 13th round is over
-			if (roundNumber == 13)
+			if (roundNumber == 14)
 			{
 				printf("\n\n**************************************************************************************************************");
 				printf("\n\t\t\tEND OF GAME");
