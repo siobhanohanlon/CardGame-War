@@ -10,10 +10,41 @@
 //doing this but only using as many players as told 
 
 //Display- display Game Status
-void Display(int playerCard[players][card], int playerSuit[players][suit], int numPlayers, int playerScores[players])
+void Display(int numPlayers, int playerScores[players], int round)
 {
+	//Declare Variables
+	int winner = 0, winScore = 0;
 
+	//Display Score List
+	printf("\nThe Score list is as shown:");
 
+	//Loop for Scores
+	for (int dis = 0; dis < numPlayers; dis++)
+	{
+		printf("\nPlayer %d:\t%d", (dis + 1),playerScores[dis]);
+
+		//Find Winner
+		if (playerScores[dis] > winScore)
+		{
+			//Set Winning Variables
+			winScore = playerScores[dis];
+			winner = (dis + 1);
+		}
+	}
+	
+	//if asked for display during a game
+	if (round < 13)
+	{
+		printf("\nWinning Game by Round %d is:  %d", winner, round);
+	}
+
+	//If it was the last round display Game Winner
+	else
+	{
+		printf("\nWinner of Game is:  %d", winner);
+	}
+	
+	return 1;
 	//Play game
 	//PlayGame(playerCard, playerSuit, numPlayers, playerScores);
 }
@@ -64,67 +95,72 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 {
 	//Assign variables
 	int menuChoice, cardChoice, player = 1, points = 0, chosenCard;
-	int currentPlayer;
+	int currentPlayer, winner = 0, winningCard = 0, roundNumber = 1;
 	int playerSelectedCard[4][4], playerSelectedSuit[4][4];
 	char exit = 'Y', round = 'Y';
 
-	//Next person has atleast 1 turn option
+	//Game goes on for 13 rounds
 	do {
-		//Update Current Player
-		currentPlayer = (player - 1);
+		//Next person has atleast 1 turn option
+		do {
+			printf("\nRound %d", roundNumber);
 
-		//Display Player Cards
+			//Update Current Player
+			currentPlayer = (player - 1);
+
+			//Display Player Cards
 #pragma region DisplayCards
 
 		//Display Card Numbers
-		printf("\nPlayer %d's Cards are displayed below and number above them\n", player);
-		printf("   1.       2.       3.       4.       5.       6.       7.       8.       9.       10.      11.      12.      13.   \n");
+			printf("\nPlayer %d's Cards are displayed below and number above them\n", player);
+			printf("   1.       2.       3.       4.       5.       6.       7.       8.       9.       10.      11.      12.      13.   \n");
 
-		//Display Top of Cards
-		printf(" ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______\n");
+			//Display Top of Cards
+			printf(" ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______   ______\n");
 
-		//Display Card Number at Top
-		for (int c = 0; c < 13; c++)
-		{
-			if (playerCard[currentPlayer][c] > 1 && playerCard[currentPlayer][c] < 10)
+			//Display Card Number at Top
+			for (int c = 0; c < 13; c++)
 			{
-				printf("|%d     | ", playerCard[currentPlayer][c]);
+				if (playerCard[currentPlayer][c] > 1 && playerCard[currentPlayer][c] < 10)
+				{
+					printf("|%d     | ", playerCard[currentPlayer][c]);
+				}
+
+				else if (playerCard[currentPlayer][c] == 1)
+				{
+					printf("|A     | ");
+					playerCard[currentPlayer][c] = 14;
+				}
+
+				else if (playerCard[currentPlayer][c] == 10)
+				{
+					printf("|%d    | ", playerCard[currentPlayer][c]);
+				}
+
+				else if (playerCard[currentPlayer][c] == 11)
+				{
+					printf("|J     | ");
+				}
+
+				else if (playerCard[currentPlayer][c] == 12)
+				{
+					printf("|Q     | ");
+				}
+
+				else if (playerCard[currentPlayer][c] == 13)
+				{
+					printf("|K     | ");
+				}
 			}
 
-			else if (playerCard[currentPlayer][c] == 1)
-			{
-				printf("|A     | ");
-			}
+			//Skip to new line
+			printf("\n");
 
-			else if (playerCard[currentPlayer][c] == 10)
+			//Display Card Suit
+			for (int c = 0; c < 13; c++)
 			{
-				printf("|%d    | ", playerCard[currentPlayer][c]);
-			}
-
-			else if (playerCard[currentPlayer][c] == 11)
-			{
-				printf("|J     | ");
-			}
-
-			else if (playerCard[currentPlayer][c] == 12)
-			{
-				printf("|Q     | ");
-			}
-
-			else if (playerCard[currentPlayer][c] == 13)
-			{
-				printf("|K     | ");
-			}
-		}
-
-		//Skip to new line
-		printf("\n");
-
-		//Display Card Suit
-		for (int c = 0; c < 13; c++)
-		{
-			switch (playerSuit[currentPlayer][c])
-			{
+				switch (playerSuit[currentPlayer][c])
+				{
 				case 1:
 					printf("|   H  | ");
 					break;
@@ -140,67 +176,67 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				case 4:
 					printf("|   C  | ");
 					break;
+				}
 			}
-		}
 
-		//Skip to new line
-		printf("\n");
+			//Skip to new line
+			printf("\n");
 
-		//Display Card Number at Bottom
-		for (int c = 0; c < 13; c++)
-		{
-			if (playerCard[currentPlayer][c] > 1 && playerCard[currentPlayer][c] < 10)
+			//Display Card Number at Bottom
+			for (int c = 0; c < 13; c++)
 			{
-				printf("|     %d| ", playerCard[currentPlayer][c]);
+				if (playerCard[currentPlayer][c] > 1 && playerCard[currentPlayer][c] < 10)
+				{
+					printf("|     %d| ", playerCard[currentPlayer][c]);
+				}
+
+				else if (playerCard[currentPlayer][c] == 1)
+				{
+					printf("|     A| ");
+				}
+
+				else if (playerCard[currentPlayer][c] == 10)
+				{
+					printf("|    %d| ", playerCard[currentPlayer][c]);
+				}
+
+				else if (playerCard[currentPlayer][c] == 11)
+				{
+					printf("|     J| ");
+				}
+
+				else if (playerCard[currentPlayer][c] == 12)
+				{
+					printf("|     Q| ");
+				}
+
+				else if (playerCard[currentPlayer][c] == 13)
+				{
+					printf("|     K| ");
+				}
 			}
 
-			else if (playerCard[currentPlayer][c] == 1)
-			{
-				printf("|     A| ");
-			}
 
-			else if (playerCard[currentPlayer][c] == 10)
-			{
-				printf("|    %d| ", playerCard[currentPlayer][c]);
-			}
+			//Display Bottom of Cards
+			printf("\n|______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______|\n");
+#pragma endregion
 
-			else if (playerCard[currentPlayer][c] == 11)
-			{
-				printf("|     J| ");
-			}
+			//Ask Player to select card
+			printf("\nPlease Select Card you wish to Play (Or 0 to exit)\nChoice: ");
+			scanf("%d", &cardChoice);
 
-			else if (playerCard[currentPlayer][c] == 12)
-			{
-				printf("|     Q| ");
-			}
-
-			else if (playerCard[currentPlayer][c] == 13)
-			{
-				printf("|     K| ");
-			}
-		}
-
-
-		//Display Bottom of Cards
-		printf("\n|______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______| |______|\n");
-	#pragma endregion
-
-		//Ask Player to select card
-		printf("\nPlease Select Card you wish to Play (Or any minus number to exit)\nChoice: ");
-		scanf("%d", &cardChoice);
-
-		//Set choice to players card
+			//Set choice to players card
 #pragma region SavePlayerChoice
-		switch (cardChoice)
-		{
+			//Save Player Select Card # and Suit
+			switch (cardChoice)
+			{
 			case 1:
-				//Save Player Select Card # and Suit
 				playerSelectedCard[currentPlayer][currentPlayer] = playerCard[currentPlayer][0];
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][0];
 				break;
 			case 2:
 				playerSelectedCard[currentPlayer][currentPlayer] = playerCard[currentPlayer][1];
-				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][1]; 
+				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][1];
 				break;
 			case 3:
 				playerSelectedCard[currentPlayer][currentPlayer] = playerCard[currentPlayer][2];
@@ -246,87 +282,177 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				playerSelectedCard[currentPlayer][currentPlayer] = playerCard[currentPlayer][12];
 				playerSelectedSuit[currentPlayer][currentPlayer] = playerSuit[currentPlayer][12];
 				break;
-		}
+			}
 #pragma endregion
 
-		//Add chosen card to points for round
+			//Add chosen card to points for round
 #pragma region AddCardToPoints
 		//Save Card choice to Variable
-		chosenCard = playerSelectedCard[currentPlayer][currentPlayer];
+			chosenCard = playerSelectedCard[currentPlayer][currentPlayer];
 
-		//Set point decide by Card Choice
-		switch (chosenCard)
-		{
-		case 1:
-			points += 14;
-			break;
-		case 2:
-			points += 2;
-			break;
-		case 3:
-			points += 3;
-			break;
-		case 4:
-			points += 4;
-			break;
-		case 5:
-			points += 5;
-			break;
-		case 6:
-			points += 6;
-			break;
-		case 7:
-			points += 7;
-			break;
-		case 8:
-			points += 8;
-			break;
-		case 9:
-			points += 9;
-			break;
-		case 10:
-			points += 10;
-			break;
-		case 11:
-			points += 11;
-			break;
-		case 12:
-			points += 12;
-			break;
-		case 13:
-			points += 13;
-			break;
-		}
+			//Set point decide by Card Choice
+			switch (chosenCard)
+			{
+			case 14:
+				points += 14;
+				break;
+			case 2:
+				points += 2;
+				break;
+			case 3:
+				points += 3;
+				break;
+			case 4:
+				points += 4;
+				break;
+			case 5:
+				points += 5;
+				break;
+			case 6:
+				points += 6;
+				break;
+			case 7:
+				points += 7;
+				break;
+			case 8:
+				points += 8;
+				break;
+			case 9:
+				points += 9;
+				break;
+			case 10:
+				points += 10;
+				break;
+			case 11:
+				points += 11;
+				break;
+			case 12:
+				points += 12;
+				break;
+			case 13:
+				points += 13;
+				break;
+			}
 #pragma endregion
 
-		printf("%d %d %d", playerSelectedCard[currentPlayer][currentPlayer], playerSelectedSuit[currentPlayer][currentPlayer], points);
+			printf("%d %d %d", playerSelectedCard[currentPlayer][currentPlayer], playerSelectedSuit[currentPlayer][currentPlayer], points);
 
-		//If a minus number entered exit loop
-		if (cardChoice < 0)
+			//If a minus number entered exit loop
+			if (cardChoice == 0)
+			{
+				//Exit Round loop
+				round = 'R';
+
+				//Exit Loop using R and Enter Menu using exit
+				exit = 'N';
+			}
+
+			//If Player count is over amount of Players playing
+			if (player >= numPlayers)
+			{
+				//Reset Count
+				player = 0;
+
+				//Exit Loop
+				round = 'R';
+			}
+
+			//Update Player Counter
+			player++;
+		} while (round != 'R');
+
+		//If Exit to menu selected
+		if(exit != 'N')
 		{
-			//Exit Loop using R and Enter Menu using exit
-			round = 'R';
-			exit = 'N';
+			//Update Round Number
+			roundNumber++;
+
+			//End Of Round- Find Winner
+	#pragma region EndOfRound
+	#pragma region FindWinner
+			//Check if any players have the same card
+			for (int f = 0; f < numPlayers; f++)
+			{
+				for (int ff = f + 1; ff < numPlayers; ff++)
+				{
+					if (playerSelectedCard[f][f] == playerSelectedCard[ff][ff])
+					{
+						playerSelectedCard[f][f] = 0;
+						playerSelectedCard[ff][ff] = 0;
+					}
+				}
+			}
+
+			//Find Winner
+			for (int w = 0; w < numPlayers; w++)
+			{
+				if (playerSelectedCard[w][w] > winningCard)
+				{
+					winningCard = playerSelectedCard[w][w];
+					winner = (w + 1);
+					printf("\n%d", winner);
+				}
+			}
+	#pragma endregion
+
+			//If Round is a Draw
+			if (winner == 0)
+			{
+				if (roundNumber < 13)
+				{
+					//Display Round is a draw
+					printf("\n\n************************************************************************");
+					printf("\nThis Rounds was a draw!");
+					printf("\nPoints rolled over to next round");
+					printf("\n************************************************************************");
+				}
+				
+				//If last round is a draw
+				else if (roundNumber == 13) 
+				{
+					printf("\n\n************************************************************************");
+					printf("\nLast Round was a draw!");
+					printf("\nPoints Lost to Game!!");
+					printf("\n************************************************************************");
+				}
+			}
+
+			//If the round has a winner
+			else if (winner > 0)
+			{
+				//Display Winner or round Screen
+				printf("\n\n************************************************************************");
+				printf("\nThis Rounds winner is Player: %d", winner);
+				printf("\nTheyve scored this rounds points of %d", points);
+				printf("\n************************************************************************");
+
+				//Add Points to Players Score
+				playerScores[(winner-1)] += points;
+				printf("\n%d", playerScores[winner]);
+
+				//Reset Points
+				points = 0;
+			}
+
+			//If 13th round is over
+			if (roundNumber == 13)
+			{
+				printf("\n\n**************************************************************************************************************");
+				printf("\n\t\t\tEND OF GAME");
+				Display(numPlayers, playerScores, 13);
+				exit = 'N';
+			}
+
+			else
+			{
+				//Reset Round Loop
+				round = 'Y';
+				winningCard = 0;
+				winner = 0;
+			}
 		}
-
-		//Update Player Counter
-		player++;
-
-		//If Player count is over amount of Players playing
-		if (player > numPlayers)
-		{
-			//Reset Count
-			player = 1;
-
-			//Exit Loop
-			round = 'R';
-		}
-	}while(round != 'R');
-
-	//End Of Round- Find Winner
-#pragma region EndOfRound
-	//
 #pragma endregion
+	}while(exit != 'N');
 
 	//If player Enters a minus number at any point of game Menu is shown
 	//Menu to decide what to do
@@ -353,7 +479,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			SaveGame(playerCard, playerSuit, numPlayers, playerScores);
 			break;
 		case 4:
-			Display(playerCard, playerSuit, numPlayers, playerScores);
+			Display(numPlayers, playerScores, (roundNumber-1));
 			break;
 		}
 	}
@@ -446,6 +572,7 @@ void ContinueGame()
 	int playerCardLoad[players][card];
 	int playerSuitLoad[players][suit];
 	int playerScores[players];
+	int winning, roundNum;
 
 	//Declare Variables
 	int numPlayers, numLines = 0;
@@ -500,7 +627,7 @@ void ContinueGame()
 #pragma endregion
 
 	//Display Game Status
-	Display(playerCardLoad, playerSuitLoad, numPlayers, playerScores);
+	Display(numPlayers, playerScores, winning, roundNum);
 }
 
 //----------------------------------------------------------------------------
