@@ -2,53 +2,74 @@
 #include <time.h>
 #include <stdlib.h>
 
-//Define Variables for 2D array
+//Define Variables for Arrays
 #define card 13
 #define suit 13
 #define players 4
-//i am defining player so 2d array will be 4X13. 
-//doing this but only using as many players as told 
+//Defining these here so i use these variables for alot of arrays, so i dont have to keep defining them
 
 //Save Game- Here will write to file
-void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int numPlayers, int playerScores[players], int roundNum)
+void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int numPlayers, int playerScores[players], int roundNum, int playerUsedCards[players][card])
 {
-	//declare File Name
+	//Declare File Names- Made a seperate one for scores to help stop mistakes/errors
 	FILE* gameStatus;
 	FILE* gameScores;
 
-	//Open & Write to file
+	//Open & Write to files
 	gameStatus = fopen("GameSaved.txt", "w");
-	gameScores = fopen("GameScore.txt", "w");
 
-	//Check if file is open
+	//Check if files are open
 	if (gameStatus == NULL || gameScores == NULL)
 	{
 		printf("Sorry File could not be opened\n");
 	}
 
+	//If Both Files are open
 	else
 	{
+		//Print Number of Players and Round Number
 		fprintf(gameStatus, "%d %d\n", numPlayers, roundNum);
-		fprintf(gameStatus, "\n");
 
+		//Loop for each players Cards and Suits
 		for (int p = 0; p < numPlayers; p++)
 		{
-			//Generate Random cards
+			//Only loop for 13 times- 13 cards each
 			for (int i = 0; i < 13; i++)
 			{
+				//Print Card and Suit
 				fprintf(gameStatus, "%d %d\n", playerCard[p][i], playerSuit[p][i]);
 			}
 
+			//Skip a line before next player
 			fprintf(gameStatus, "\n");
 		}
 
+		//Loop for each players used cards
+		for (int q = 0; q < numPlayers; q++)
+		{
+			//Only loop for 13 times- 13 cards each
+			for (int j = 0; j < 13; j++)
+			{
+				//Print Card if used or not
+				fprintf(gameStatus, "%d\n", playerUsedCards[q][j]);
+			}
+
+			//Skip a line before next player
+			fprintf(gameStatus, "\n");
+		}
+		
+		//Close File and open other
+		fclose(gameStatus);
+		gameScores = fopen("GameScore.txt", "w");
+
+		//Only Loop for each Player
 		for (int p = 0; p < numPlayers; p++)
 		{
+			//Print each players scores to other file
 			fprintf(gameScores, "%d\n", playerScores[p]);
 		}
 
 		//Close File
-		fclose(gameStatus);
 		fclose(gameScores);
 	}
 }
@@ -537,7 +558,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 
 	//If player Enters a minus number at any point of game Menu is shown
 	//Menu to decide what to do
-	//**********************ERROR****************************Menu(playerCard, playerSuit, numPlayers, playerScores, (roundNumber - 1));
+	Menu(playerCard, playerSuit, numPlayers, playerScores, (roundNumber - 1), playerUsedCards);
 }
 
 //----------------------------------------------------------------------------
@@ -553,6 +574,7 @@ void Display(int playerCard[players][card], int playerSuit[players][suit], int n
 	//Loop for Scores
 	for (int dis = 0; dis < numPlayers; dis++)
 	{
+		//Display Each Player and Their Scores
 		printf("\nPlayer %d:\t%d", (dis + 1), playerScores[dis]);
 
 		//Find Winner
@@ -567,16 +589,18 @@ void Display(int playerCard[players][card], int playerSuit[players][suit], int n
 	//if asked for display during a game
 	if (round < 13)
 	{
-		printf("\nWinning Game by Round %d is:  %d", round, winner);
+		//Display who is winning and the round it is
+		printf("\nWinner of Game at Round %d is:  %d", round, winner);
 	}
 
 	//If it was the last round display Game Winner
 	else
 	{
+		//Winner of game at end
 		printf("\nWinner of Game is:  %d", winner);
 	}
 
-	//Menu
+	//Continue Game
 	PlayGame(playerCard, playerSuit, numPlayers, playerScores, round, playerUsedCards);
 }
 
@@ -643,6 +667,7 @@ void NewGame()
 	{
 		for (int ca = 0; ca < card; ca++)
 		{
+			//Make sure each is reset for new game
 			playerUsedCards[play][ca] = 0;
 		}
 	}
@@ -653,7 +678,7 @@ void NewGame()
 		//Generate Random cards
 		for (int i = 0; i < 13; i++)
 		{
-			//Use Random class to pick player cards
+			//Use Random class to pick player cards and suits
 			cardNum = cards[rand() % 52];
 			cardSuit = suits[rand() % 52];
 
@@ -661,9 +686,6 @@ void NewGame()
 			playerCard[p][i] = cardNum;
 			playerSuit[p][i] = cardSuit;
 		}
-
-		//Reset Random Class
-		srand(time(NULL));
 	}
 
 	//Start Game
@@ -675,62 +697,78 @@ void NewGame()
 void ContinueGame()
 {
 	//Create Arrays
-	int playerCardLoad[players][card];
-	int playerSuitLoad[players][suit];
-	int playerUsedCardsLoad[players][card];
-	int playerScores[players];
+	int playerCardLoad[players][card], playerSuitLoad[players][suit];
+	int playerUsedCardsLoad[players][card], playerScores[players];
 
 	//Declare Variables
 	int numPlayers = 0, roundNum=0;
 
 	//Load Game details
 #pragma region ReadFromFile
-	//declare File Name
+	//Declare File Names
 	FILE* gameStatus;
 	FILE* gameScores;
 
-	//Read
+	//Read from Files
 	gameStatus = fopen("GameSaved.txt", "r");
 	gameScores = fopen("GameScore.txt", "r");
 
-	// Check if File is Open
-	if (gameStatus == NULL)
+	//Check if File is Open
+	if (gameStatus == NULL || gameScores == NULL)
 	{
+		//If Files Cant be Opened
 		printf("Sorry File could not be opened\n");
 	}
 
+	//If File can be Opened
 	else
 	{
-
-		//Check how many Players game has
+		//Check how many Players game has and round it was on
 		fscanf(gameStatus, "%d %d\n", &numPlayers, &roundNum);
+		//Skip Line
 		fscanf(gameStatus, "\n");
 
+		//Repeat for amount of players there is
 		for (int p = 0; p < numPlayers; p++)
 		{
-			//Generate Random cards
+			//Repeat 13 times to save cards and suits
 			for (int i = 0; i < 13; i++)
 			{
+				//Save card details to arrays
 				fscanf(gameStatus, "%d %d\n", &playerCardLoad[p][i], &playerSuitLoad[p][i]);
 			}
 
+			//Skip line between players (as done when entering)
 			fscanf(gameStatus, "\n");
 		}
-		//Close File
+
+		//Loop for each players used cards
+		for (int q = 0; q < numPlayers; q++)
+		{
+			//Only loop for 13 times- 13 cards each
+			for (int j = 0; j < 13; j++)
+			{
+				//Print Card if used or not
+				fprintf(gameStatus, "%d\n", playerUsedCardsLoad[q][j]);
+			}
+
+			//Skip a line before next player
+			fprintf(gameStatus, "\n");
+		}
+
+		//Close Game status File
 		fclose(gameStatus);
 
 
 		//Game Player Scores
-
-			//Assign read scores to array
 		for (int p = 0; p < numPlayers; p++)
 		{
+			//Assign read scores to array
 			fscanf(gameScores, "%d\n", &playerScores[p]);
 		}
 
 		//Close File
 		fclose(gameScores);
-
 	}
 #pragma endregion
 
@@ -756,16 +794,23 @@ void Menu(int playerCard[players][card], int playerSuit[players][suit], int numP
 	//Selected Menu Option
 	switch (menuChoice)
 	{
-	case 1:
+		//Continue Game
+		case 1:
 		PlayGame(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
 		break;
-	case 2:
+
+		//Exit without saving
+		case 2:
 		exit (0);
 		break;
-	case 3:
-		SaveGame(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1));
+
+		//Save Game and Exit
+		case 3:
+		SaveGame(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
 		break;
-	case 4:
+
+		//Display Status of Game
+		case 4:
 		Display(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
 		break;
 	}
@@ -779,19 +824,21 @@ void main()
 	int initialise;
 
 	//Title
-	printf("*********** Welcome to the CardGame of War ***********");
+	printf("********************************** Welcome to the CardGame of War **********************************");
 
 	//Ask if starting a new game or loading one
-	printf("\nPlease Enter 1 to start a New Game or 2 to Load a Saved Game:\t");
+	printf("\nPlease Enter 1 to Load a Saved Game or any Other Number to Start a New Game:\t");
 	scanf("%d", &initialise);
 
 	//If Statement to use new or load game methods
-	if (initialise == 2)
+	if (initialise == 1)
 	{
+		//Go to Load Game Function
 		ContinueGame();
 	}
 	else
 	{
+		//Start a New Game
 		NewGame();
 	}
 }
