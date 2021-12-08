@@ -229,11 +229,11 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			scanf("%d", &cardChoice);
 
 
-			printf("\n%d\t%d", cardChoice, playerUsedCards[currentPlayer][(cardChoice - 1)]);
+			printf("\n%d\t%d", cardChoice, playerUsedCards[currentPlayer][0]);
 			//Set choice to players card
 #pragma region SavePlayerChoice
 			//Check if trying to play a used card
-			if(playerUsedCards[currentPlayer][(cardChoice -1)] == 1);
+			if(playerUsedCards[currentPlayer][0] == 1);
 			{
 				do
 				{
