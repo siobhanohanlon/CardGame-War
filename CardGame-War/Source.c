@@ -190,7 +190,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 					printf("|     %d| ", playerCard[currentPlayer][c]);
 				}
 
-				else if (playerCard[currentPlayer][c] == 1)
+				else if (playerCard[currentPlayer][c] == 14)
 				{
 					printf("|     A| ");
 				}
