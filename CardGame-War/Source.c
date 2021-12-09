@@ -8,6 +8,41 @@
 #define players 4
 //Defining these here so i use these variables for alot of arrays, so i dont have to keep defining them
 
+//Define Functions at start
+void SaveGame();
+void PlayGame();
+void Display();
+void NewGame();
+void ContinueGame();
+void Menu();
+
+//----------------------------------------------------------------------------
+//Main
+void main()
+{
+	//Declare Variables
+	int initialise;
+
+	//Title
+	printf("********************************** Welcome to the CardGame of War **********************************");
+
+	//Ask if starting a new game or loading one
+	printf("\nPlease Enter 1 to Load a Saved Game or any Other Number to Start a New Game:\t");
+	scanf("%d", &initialise);
+
+	//If Statement to use new or load game methods
+	if (initialise == 1)
+	{
+		//Go to Load Game Function
+		ContinueGame();
+	}
+	else
+	{
+		//Start a New Game
+		NewGame();
+	}
+}
+
 //Save Game- Here will write to file
 void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int numPlayers, int playerScores[players], int roundNum, int playerUsedCards[players][card])
 {
@@ -19,9 +54,9 @@ void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int 
 	gameStatus = fopen("GameSaved.txt", "w");
 
 	//Check if files are open
-	if (gameStatus == NULL || gameScores == NULL)
+	if (gameStatus == NULL)
 	{
-		printf("Sorry File could not be opened\n");
+		printf("Sorry Game Status File could not be opened\n");
 	}
 
 	//If Both Files are open
@@ -62,15 +97,24 @@ void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int 
 		fclose(gameStatus);
 		gameScores = fopen("GameScore.txt", "w");
 
-		//Only Loop for each Player
-		for (int p = 0; p < numPlayers; p++)
+		//Check if File open
+		if (gameScores == NULL)
 		{
-			//Print each players scores to other file
-			fprintf(gameScores, "%d\n", playerScores[p]);
+			printf("Sorry Score File could not be opened\n");
 		}
 
-		//Close File
-		fclose(gameScores);
+		else
+		{
+			//Only Loop for each Player
+			for (int p = 0; p < numPlayers; p++)
+			{
+				//Print each players scores to other file
+				fprintf(gameScores, "%d\n", playerScores[p]);
+			}
+
+			//Close File
+			fclose(gameScores);
+		}	
 	}
 }
 
@@ -95,6 +139,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 
 			//Display Player Cards
 #pragma region DisplayCards
+
 			//Display Card Numbers
 			printf("\nPlayer %d's Cards are displayed below and number above them\n", player);
 
@@ -249,8 +294,6 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			printf("\nPlease Select Card you wish to Play (Or 0 to exit)\nChoice: ");
 			scanf("%d", &cardChoice);
 
-
-			printf("\n%d\t%d", cardChoice, playerUsedCards[currentPlayer][(cardChoice - 1)]);
 			//Set choice to players card
 #pragma region SavePlayerChoice
 			//Check if trying to play a used card
@@ -437,8 +480,6 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			}
 #pragma endregion
 
-			printf("%d %d %d", playerSelectedCard[currentPlayer][currentPlayer], playerSelectedSuit[currentPlayer][currentPlayer], points);
-
 			//If a minus number entered exit loop
 			if (cardChoice == 0)
 			{
@@ -492,7 +533,6 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				{
 					winningCard = playerSelectedCard[w][w];
 					winner = (w + 1);
-					printf("\n%d", winner);
 				}
 			}
 	#pragma endregion
@@ -523,14 +563,13 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			else if (winner > 0)
 			{
 				//Display Winner or round Screen
-				printf("\n\n************************************************************************");
+				printf("\n************************************************************************");
 				printf("\nThis Rounds winner is Player: %d", winner);
 				printf("\nTheyve scored this rounds points of %d", points);
-				printf("\n************************************************************************");
+				printf("\n************************************************************************\n");
 
 				//Add Points to Players Score
 				playerScores[(winner-1)] += points;
-				printf("\n%d", playerScores[winner]);
 
 				//Reset Points
 				points = 0;
@@ -590,14 +629,14 @@ void Display(int playerCard[players][card], int playerSuit[players][suit], int n
 	if (round < 13)
 	{
 		//Display who is winning and the round it is
-		printf("\nWinner of Game at Round %d is:  %d", round, winner);
+		printf("\nWinner of Game at End of Round %d is:  %d\n\n", (round - 1), winner);
 	}
 
 	//If it was the last round display Game Winner
 	else
 	{
 		//Winner of game at end
-		printf("\nWinner of Game is:  %d", winner);
+		printf("\nWinner of Game is:  %d\n\n", winner);
 	}
 
 	//Continue Game
@@ -787,7 +826,7 @@ void Menu(int playerCard[players][card], int playerSuit[players][suit], int numP
 	printf("\n\n************************************************************************");
 	printf("\n\t\t\t\tMenu");
 	printf("\n\t\t    Please Select an Option below");
-	printf("\n    1- Continue\t   2-Exit\t3-Exit & Save\t4-Display Status\n");
+	printf("\n    1- Continue\t   2-Exit\t3-Exit & Save\t4-Display Status\nChoice:\t");
 	scanf("%d", &menuChoice);
 	printf("\n************************************************************************");
 
@@ -813,32 +852,5 @@ void Menu(int playerCard[players][card], int playerSuit[players][suit], int numP
 		case 4:
 		Display(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
 		break;
-	}
-}
-
-//----------------------------------------------------------------------------
-//Main
-void main()
-{
-	//Declare Variables
-	int initialise;
-
-	//Title
-	printf("********************************** Welcome to the CardGame of War **********************************");
-
-	//Ask if starting a new game or loading one
-	printf("\nPlease Enter 1 to Load a Saved Game or any Other Number to Start a New Game:\t");
-	scanf("%d", &initialise);
-
-	//If Statement to use new or load game methods
-	if (initialise == 1)
-	{
-		//Go to Load Game Function
-		ContinueGame();
-	}
-	else
-	{
-		//Start a New Game
-		NewGame();
 	}
 }
