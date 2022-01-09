@@ -63,7 +63,7 @@ void SaveGame(int playerCard[players][card], int playerSuit[players][suit], int 
 	else
 	{
 		//Print Number of Players and Round Number
-		fprintf(gameStatus, "%d %d\n", numPlayers, roundNum);
+		fprintf(gameStatus, "%d %d\n\n", numPlayers, roundNum);
 
 		//Loop for each players Cards and Suits
 		for (int p = 0; p < numPlayers; p++)
@@ -580,7 +580,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 			{
 				printf("\n\n**************************************************************************************************************");
 				printf("\n\t\t\tEND OF GAME");
-				//**********************ERROR************************Display(playerCard, playerSuit, numPlayers, playerScores, 13);
+				Display(playerCard, playerSuit, numPlayers, playerScores, roundNumber, playerUsedCards);
 				exit = 'N';
 			}
 
@@ -597,7 +597,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 
 	//If player Enters a minus number at any point of game Menu is shown
 	//Menu to decide what to do
-	Menu(playerCard, playerSuit, numPlayers, playerScores, (roundNumber - 1), playerUsedCards);
+	Menu(playerCard, playerSuit, numPlayers, playerScores, roundNumber, playerUsedCards);
 }
 
 //----------------------------------------------------------------------------
@@ -605,7 +605,7 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 void Display(int playerCard[players][card], int playerSuit[players][suit], int numPlayers, int playerScores[players], int round, int playerUsedCards[players][card])
 {
 	//Declare Variables
-	int winner = 0, winScore = 0;
+	int winner = 0, winScore = 0, leave;
 
 	//Display Score List
 	printf("\nThe Score list is as shown:");
@@ -630,17 +630,28 @@ void Display(int playerCard[players][card], int playerSuit[players][suit], int n
 	{
 		//Display who is winning and the round it is
 		printf("\nWinner of Game at End of Round %d is:  %d\n\n", (round - 1), winner);
+
+		//Continue Game
+		PlayGame(playerCard, playerSuit, numPlayers, playerScores, round, playerUsedCards);
 	}
 
 	//If it was the last round display Game Winner
 	else
 	{
 		//Winner of game at end
-		printf("\nWinner of Game is:  %d\n\n", winner);
-	}
+		printf("\nWinner of Game is:  %d\nCongratulations!!\n", winner);
+		printf("\n\n\nGame is Over!!\nPlease press 0 to exit or any other number to start a new game:");
+		scanf("%d", &leave);
 
-	//Continue Game
-	PlayGame(playerCard, playerSuit, numPlayers, playerScores, round, playerUsedCards);
+		if (leave <= 0) 
+		{
+			exit(0);
+		}
+		else
+		{
+			NewGame();
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -740,7 +751,7 @@ void ContinueGame()
 	int playerUsedCardsLoad[players][card], playerScores[players];
 
 	//Declare Variables
-	int numPlayers = 0, roundNum=0;
+	int numPlayers = 0, roundNum = 0;
 
 	//Load Game details
 #pragma region ReadFromFile
@@ -763,9 +774,7 @@ void ContinueGame()
 	else
 	{
 		//Check how many Players game has and round it was on
-		fscanf(gameStatus, "%d %d\n", &numPlayers, &roundNum);
-		//Skip Line
-		fscanf(gameStatus, "\n");
+		fscanf(gameStatus, "%d %d\n\n", &numPlayers, &roundNum);
 
 		//Repeat for amount of players there is
 		for (int p = 0; p < numPlayers; p++)
@@ -835,7 +844,7 @@ void Menu(int playerCard[players][card], int playerSuit[players][suit], int numP
 	{
 		//Continue Game
 		case 1:
-		PlayGame(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
+		PlayGame(playerCard, playerSuit, numPlayers, playerScores, roundNum, playerUsedCards);
 		break;
 
 		//Exit without saving
@@ -845,12 +854,12 @@ void Menu(int playerCard[players][card], int playerSuit[players][suit], int numP
 
 		//Save Game and Exit
 		case 3:
-		SaveGame(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
+		SaveGame(playerCard, playerSuit, numPlayers, playerScores, roundNum, playerUsedCards);
 		break;
 
 		//Display Status of Game
 		case 4:
-		Display(playerCard, playerSuit, numPlayers, playerScores, (roundNum - 1), playerUsedCards);
+		Display(playerCard, playerSuit, numPlayers, playerScores, roundNum, playerUsedCards);
 		break;
 	}
 }
