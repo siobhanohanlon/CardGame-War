@@ -224,6 +224,8 @@ void PlayGame(int playerCard[players][card], int playerSuit[players][suit], int 
 				{
 					printf("|   %c  | ", (icon+2));
 				}
+
+				
 			}
 
 			//Skip to new line
